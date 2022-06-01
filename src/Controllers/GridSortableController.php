@@ -24,16 +24,21 @@ class GridSortableController extends Controller
 
         try {
             /** @var \Illuminate\Database\Eloquent\Collection $models */
+            /*
             $models = $modelClass::find($sorts->keys());
-
-            foreach ($models as $key => $model) {
-
+            foreach ($models as $model) {
                 $column = data_get($model->sortable, 'order_column_name', 'order_column');
-
-                #$model->{$column} = $sorts->get($model->getKey());
-                $model->{$column} = $key;
+                $model->{$column} = $sorts->get($model->getKey());
                 $model->save();
             }
+            */
+            foreach ($sorts as $key => $sort) {
+                $model = $modelClass::find($key);
+                $column = data_get($model->sortable, 'order_column_name', 'order_column');
+                $model->{$column} = $sort;
+                $model->save();
+            }
+
         } catch (Exception $exception) {
             $status  = false;
             $message = $exception->getMessage();
